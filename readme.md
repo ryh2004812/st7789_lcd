@@ -8,7 +8,7 @@
 
 ### 依赖
 
-- RT-Thread 5.0.0+
+- RT-Thread 4.0.0+
 - SPI 驱动：ST7789 屏幕使用 SPI 进行数据通讯，需要系统SPI 驱动支持；
 
 ### 获取软件包
@@ -131,5 +131,4 @@ MSH_CMD_EXPORT(st7789_test, lcd will fill color.);
 
 维护人:
 
-- [vandoul](https://github.com/Vandoul)
-- 主页：[tft lcd st7789 rtthread graphic device](https://github.com/Vandoul/ST7789)
+- ryh
