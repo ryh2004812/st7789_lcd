@@ -5,7 +5,7 @@
  *
  * Change Logs:
  * Date           Author        Notes
- * 2023-06-10     Vandoul       First version
+ * 2025-11-23     ryh       First version
  */
 #include "rtthread.h"
 #include "lcd_st7789.h"
@@ -46,6 +46,9 @@
  *      111=16M truncated
 */
 #define LCD_CMD_INTERFACE_PIXEL_FORMAT      0x3A
+
+#define OFFSET_X 0
+#define OFFSET_Y 20
 
 typedef struct
 {
@@ -134,30 +137,6 @@ void lcd_set_dir(uint8_t direction)
     }
 }
 
-//void lcd_set_dir(uint8_t direction)
-//{
-//    lcddev.dir = direction;
-//    switch (direction)
-//    {
-//        case LCD_PORTAIT:
-//        case LCD_PORTAIT_180:
-//        {
-//            lcddev.width = LCD_W;
-//            lcddev.height = LCD_H;
-//        }
-//        break;
-//        case LCD_CROSSWISE:
-//        case LCD_CROSSWISE_180:
-//        {
-//            lcddev.width = LCD_H;
-//            lcddev.height = LCD_W;
-//        }
-//        break;
-//    }
-//}
-
-#define OFFSET_X 0
-#define OFFSET_Y 20
 void lcd_set_region(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2)
 {
     switch (lcddev.dir)
@@ -165,48 +144,48 @@ void lcd_set_region(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2)
         case LCD_PORTAIT:
         {
             lcd_write_command(LCD_CMD_COL_ADDR_SET);
-            lcd_write_16bit_data(x1);
-            lcd_write_16bit_data(x2);
+            lcd_write_16bit_data(x1 + PKG_ST_7789_X_OFFSET);
+            lcd_write_16bit_data(x2 + PKG_ST_7789_X_OFFSET);
 
             lcd_write_command(LCD_CMD_ROW_ADDR_SET);
-            lcd_write_16bit_data(y1 + OFFSET_Y);
-            lcd_write_16bit_data(y2 + OFFSET_Y);
+            lcd_write_16bit_data(y1 + PKG_ST_7789_Y_OFFSET);
+            lcd_write_16bit_data(y2 + PKG_ST_7789_Y_OFFSET);
 
             lcd_write_command(LCD_CMD_MEMORY_WRITE);
         }break;
         case LCD_PORTAIT_180:
         {
             lcd_write_command(LCD_CMD_COL_ADDR_SET);
-            lcd_write_16bit_data(x1);
-            lcd_write_16bit_data(x2);
+            lcd_write_16bit_data(x1 + PKG_ST_7789_X_OFFSET);
+            lcd_write_16bit_data(x2 + PKG_ST_7789_X_OFFSET);
 
             lcd_write_command(LCD_CMD_ROW_ADDR_SET);
-            lcd_write_16bit_data(y1 + OFFSET_Y);
-            lcd_write_16bit_data(y2 + OFFSET_Y);
+            lcd_write_16bit_data(y1 + PKG_ST_7789_Y_OFFSET);
+            lcd_write_16bit_data(y2 + PKG_ST_7789_Y_OFFSET);
 
             lcd_write_command(LCD_CMD_MEMORY_WRITE);
         }break;
         case LCD_CROSSWISE:
         {
             lcd_write_command(LCD_CMD_COL_ADDR_SET);
-            lcd_write_16bit_data(x1 + OFFSET_Y);
-            lcd_write_16bit_data(x2 + OFFSET_Y);
+            lcd_write_16bit_data(x1 + PKG_ST_7789_Y_OFFSET);
+            lcd_write_16bit_data(x2 + PKG_ST_7789_Y_OFFSET);
 
             lcd_write_command(LCD_CMD_ROW_ADDR_SET);
-            lcd_write_16bit_data(y1);
-            lcd_write_16bit_data(y2);
+            lcd_write_16bit_data(y1 + PKG_ST_7789_X_OFFSET);
+            lcd_write_16bit_data(y2 + PKG_ST_7789_X_OFFSET);
 
             lcd_write_command(LCD_CMD_MEMORY_WRITE);
         }break;
         case LCD_CROSSWISE_180:
         {
             lcd_write_command(LCD_CMD_COL_ADDR_SET);
-            lcd_write_16bit_data(x1 + OFFSET_Y);
-            lcd_write_16bit_data(x2 + OFFSET_Y);
+            lcd_write_16bit_data(x1 + PKG_ST_7789_Y_OFFSET);
+            lcd_write_16bit_data(x2 + PKG_ST_7789_Y_OFFSET);
 
             lcd_write_command(LCD_CMD_ROW_ADDR_SET);
-            lcd_write_16bit_data(y1);
-            lcd_write_16bit_data(y2);
+            lcd_write_16bit_data(y1 + PKG_ST_7789_X_OFFSET);
+            lcd_write_16bit_data(y2 + PKG_ST_7789_X_OFFSET);
 
             lcd_write_command(LCD_CMD_MEMORY_WRITE);
         }break;
@@ -368,7 +347,7 @@ rt_err_t spi_lcd_init(uint32_t freq)
 {
     rt_err_t res = RT_EOK;
 
-    rt_hw_spi_device_attach("spi2", "spi20", GPIOB, GPIO_PIN_12);
+    rt_hw_spi_device_attach(PKG_ST_7789_SPI_BUS_NAME, PKG_ST_7789_SPI_DEVICE_NAME, GPIOB, GPIO_PIN_12);
 
     spi_dev_lcd = (struct rt_spi_device *)rt_device_find("spi20");
     if (spi_dev_lcd == RT_NULL)

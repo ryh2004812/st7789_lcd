@@ -5,7 +5,7 @@
  *
  * Change Logs:
  * Date           Author        Notes
- * 2023-03-23     Vandoul       First version
+ * 2025-11-23     ryh       First version
  */
 #ifndef __LCD_ST7789_H__
 #define __LCD_ST7789_H__
@@ -25,17 +25,6 @@ extern "C"
 /* lcd size */
 #define LCD_W PKG_ST_7789_WIDTH
 #define LCD_H PKG_ST_7789_HEIGHT
-
-//#define PKG_ST_7789_DC_PIN 30 GET_PIN(A-, 1)
-//#define PKG_ST_7789_RES_PIN 26
-//#define PKG_ST_7789_CS_PIN 28
-//#define PKG_ST_7789_BLK_PIN 1
-
-#define PKG_ST_7789_DC_PIN  GET_PIN(B, 14)
-#define PKG_ST_7789_RES_PIN GET_PIN(B, 10)
-#define PKG_ST_7789_CS_PIN  GET_PIN(B, 12)
-#define PKG_ST_7789_BLK_PIN GET_PIN(A, 1)
-
 
 #define LCD_DC_CLR  rt_pin_write(PKG_ST_7789_DC_PIN, PIN_LOW)
 #define LCD_DC_SET  rt_pin_write(PKG_ST_7789_DC_PIN, PIN_HIGH)
